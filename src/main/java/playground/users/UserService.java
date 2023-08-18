@@ -8,13 +8,15 @@ import playground.query.UserRepository;
 
 import java.util.Collection;
 
+import static playground.StringUtil.anyMissing;
+
 @Service
 @RequiredArgsConstructor
 class UserService {
     private final UserRepository userRepo;
 
     Collection<User> findUsers(String field, String value) {
-        if (field == null || value == null) {
+        if (anyMissing(field, value)) {
             return userRepo.findAll();
         }
         return userRepo.findAll(getSpec(field, value));

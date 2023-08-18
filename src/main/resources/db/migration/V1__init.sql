@@ -4,5 +4,6 @@ create table user_table (
     last_name   text    not null,
     email       text    not null,
     age         int     not null,
-    primary key (id)
+    primary key (id),
+    unique (email)
 );
