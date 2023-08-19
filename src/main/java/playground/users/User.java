@@ -1,4 +1,4 @@
-package playground.flyway;
+package playground.users;
 
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
-import playground.query.UserRepository
 import spock.lang.Specification
 
 import static org.hamcrest.Matchers.*
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
@@ -76,6 +76,23 @@ class UserControllerSpec extends Specification {
             query << ['JOHN', 'doe', 'FOO']
     }
 
+    def 'Return Users found by numeric query'() {
+        given:
+            def matches = userRepo.findAll().findAll{it.age.toString().contains(query)}
+        expect:
+            matches.isEmpty() == isExpectedEmpty
+            mockMvc.perform(get('/user')
+                    .param('field', 'age')
+                    .param('value', query))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath('$', hasSize(matches.size())))
+                .andExpect(jsonPath('$.*.age', everyItem(hasToString(containsString(query)))))
+        where:
+            query | isExpectedEmpty
+            '4'   | false
+            'bar' | true
+    }
+
     def 'Return nothing when query param is not found'() {
         expect:
             mockMvc.perform(get('/user')
@@ -83,5 +100,14 @@ class UserControllerSpec extends Specification {
                     .param('value', 'abcdefg'))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath('$', hasSize(0)))
+    }
+
+    def 'Throw exception when query field is invalid column name'() {
+        expect:
+            mockMvc.perform(get('/user')
+                    .param('field', 'foo')
+                    .param('value', 'bar'))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString('foo')))
     }
 }
