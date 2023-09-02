@@ -2,7 +2,6 @@ package playground.users;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
-import playground.flyway.User_;
 
 import java.util.Map;
 import java.util.function.Function;

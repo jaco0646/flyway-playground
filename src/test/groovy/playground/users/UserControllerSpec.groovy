@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import static org.hamcrest.Matchers.*
@@ -91,6 +92,16 @@ class UserControllerSpec extends Specification {
             query | isExpectedEmpty
             '4'   | false
             'bar' | true
+    }
+
+    @Ignore
+    def 'Return Users found by Collection query'() {
+        expect:
+            mockMvc.perform(get('/user')
+                    .param('field', 'hobbies')
+                    .param('value', 'foo'))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath('$.*.hobbies', everyItem(hasSize(2))))
     }
 
     def 'Return nothing when query param is not found'() {

@@ -28,10 +28,11 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'io.hypersistence:hypersistence-utils-hibernate-60:3.5.0'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    annotationProcessor 'org.hibernate:hibernate-jpamodelgen:6.2.7.Final'
+    annotationProcessor 'org.hibernate:hibernate-jpamodelgen:6.3.0.Final'
 
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.flywaydb:flyway-core'
