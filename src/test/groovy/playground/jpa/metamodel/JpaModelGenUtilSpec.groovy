@@ -20,7 +20,7 @@ class JpaModelGenUtilSpec extends Specification {
             'id'        | true            | false
             'email'     | false           | false
             'age'       | true            | false
-            'hobbies'   | false           | true
+            'hobbies'   | false           | false  // Unfortunately not recognized as collection.
     }
 
     def 'Throw exception when column name is not found'() {

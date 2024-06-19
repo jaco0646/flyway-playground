@@ -1,4 +1,4 @@
-create table user_table (
+create table if not exists user_table (
     id          int         GENERATED ALWAYS AS IDENTITY,
     first_name  text        not null,
     last_name   text        not null,
